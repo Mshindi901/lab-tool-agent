@@ -14,10 +14,10 @@ class APIClient:
             'Content-Type': 'application/json'
         }
 
-    def _send_machine_info(self, endpoint, id, cpu, memory, disk, network, system):
+    def _send_machine_info(self, memory, disk, network, system):
         data = {
             'cpu': system['processor'],
-            'os': system['os'],
+            'o_s': system['os'],
             'os_version': system['os_version'],
             'architecture': system['architecture'],
             'ram_total': memory['ram_total'],
@@ -25,20 +25,20 @@ class APIClient:
             'ip_address': network['ip_address'],
         }
         response = httpx.put(
-            f"{self.base_url}/{endpoint}/{id}",
+            f"{self.base_url}/agent",
             json=data,
             headers=self.headers(),
             timeout=requestTimeout
         )
 
-    def _send_heartbeat(self, endpoint, cpu, memory, disk):
+    def _send_heartbeat(self, cpu, memory, disk):
         data = {
             'cpu_usage': cpu['cpu_usage'],
             'ram_usage': memory['ram_usage_percent'],
             'disk_usage': disk['disk_usage_percent'],
         }
         response = httpx.post(
-            f"{self.base_url}/{endpoint}",
+            f"{self.base_url}/telemetry",
             json=data,
             headers=self.headers(),
             timeout=requestTimeout
